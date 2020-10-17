@@ -9,8 +9,29 @@ function createGrid(totSquares) {
     for (i = totSquares; i < 256; i++) {
         var square = document.createElement("div");
         square.setAttribute("class", "square");
+        square.setAttribute("id", `square${i}`)
         container.appendChild(square);
     }
 }
 
 createGrid(totalSquares);
+
+
+
+var squaresNodeList = document.querySelectorAll(".square");
+
+// Adds mouseover event to all squares by their id.
+function addSquareEvent() {
+    for (i = 0; i <256; i++) {
+        let squareElement = document.getElementById("square" + i);
+        squareElement.addEventListener("mouseover", function() {
+            squareElement.style.backgroundColor = "red";
+        })
+    }
+}
+
+
+// Calls functin to set events for mouseover.
+addSquareEvent()
+
+
