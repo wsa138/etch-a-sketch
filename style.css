@@ -1,6 +1,6 @@
 #grid-container {
     display: grid;
-    background-color: black;
+    background-color: rgb(209, 208, 208);
     height: 500px;
     width: 500px;
     grid-template-rows: repeat(16, 1fr);
@@ -13,5 +13,5 @@
 }
 
 .square {
-    background-color: blue;
+    background-color: grey;
 }
