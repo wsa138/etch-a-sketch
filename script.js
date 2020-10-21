@@ -10,6 +10,9 @@ let resetButton = document.getElementById("reset");
 // Random color button element.
 let randomButton = document.getElementById("randomButton");
 
+// Default button element.
+let defaultButton = document.getElementById("defaultButton");
+
 // Function creates the amount of squares specified in argument.
 function createGrid(s = 16) {
     for (i = 0; i < (s * s); i++) {
@@ -60,4 +63,12 @@ resetButton.addEventListener("click", function() {
     }
     removeAllChildNodes(container);
     createGrid(size);
+})
+
+defaultButton.addEventListener("click", function() {
+    Array.from(allSquaresNodeList).forEach(square => {
+        square.addEventListener("mouseover", function() {
+            square.style.backgroundColor = "black";
+        })
+    })
 })
