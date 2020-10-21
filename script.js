@@ -1,9 +1,6 @@
 // Variable containing grid container.
 var container = document.getElementById("grid-container");
 
-// Variable contains total number of child elements that were appended to grid-container.
-var totalSquares = document.getElementById("grid-container").childElementCount;
-
 // Function creates the amount of squares specified in argument.
 function createGrid(size = 16) {
     for (i = 0; i < (size * size); i++) {
@@ -18,12 +15,14 @@ function createGrid(size = 16) {
 }
 
 // Adds mouseover event to all squares by their id.
-function addSquareEvent(size = 16) {
+function addSquareEvent(size=16, color="black") {
     for (i = 0; i < (size*size); i++) {
         let squareElement = document.getElementById("square" + i);
-        squareElement.addEventListener("mouseover", function() {
-            squareElement.style.backgroundColor = "black";
-        })
+        if (squareElement) {
+            squareElement.addEventListener("mouseover", function() {
+                squareElement.style.backgroundColor = color;
+            })
+        }
     }
 }
 
@@ -36,16 +35,45 @@ addSquareEvent();
 // Variable contains reference to reset button.
 var resetButton = document.getElementById("reset");
 
-// Variable contains reference to square class for all squares.
-var allSquares = Array.from(document.getElementsByClassName("square"));
 
-/* Loops through and removes old squares from previous grid.
+/*  Loops through and removes old squares from previous grid.
 Creates new grid. */
 resetButton.addEventListener("click", function() {
     while (container.hasChildNodes()) {
         container.removeChild(container.lastChild);
     }
-    let userSize = prompt("Enter the size of your grid", "16")
+    var userSize = askGridSize()
     createGrid(userSize);
     addSquareEvent(userSize);
 })
+
+// Function prompts user for grid size, checks that is it under 100.
+function askGridSize() {
+    let size = prompt("Enter the size of your grid", "16");
+    if (size > 100) {
+        alert("Max size is 100")
+        askGridSize();
+    } else {
+        return size;
+    }
+}
+
+// Variable contains reference to random color button.
+var randomColorButton = document.getElementById("randomColor");
+
+var allSquares = (Array.from(document.getElementsByClassName("square"))).length;
+
+// Set click event listener on random color button.
+randomColorButton.addEventListener("click", function() {
+    var gridSize = (Array.from(document.getElementsByClassName("square"))).length;
+    addSquareEvent(gridSize, randomColor());
+})
+
+function randomColor() {
+    let letters = '0123456789ABCDEF';
+    let color = '#';
+    for (i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
