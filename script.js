@@ -1,79 +1,63 @@
 // Variable containing grid container.
-var container = document.getElementById("grid-container");
+let container = document.getElementById("grid-container");
+
+// Node list of all squares.
+let allSquaresNodeList = document.getElementsByClassName("square");
+
+// Reset button element.
+let resetButton = document.getElementById("reset");
+
+// Random color button element.
+let randomButton = document.getElementById("randomButton");
 
 // Function creates the amount of squares specified in argument.
-function createGrid(size = 16) {
-    for (i = 0; i < (size * size); i++) {
-        let gridContainer = document.getElementById("grid-container");
-        gridContainer.style.gridTemplateRows = `repeat(${size}, 1fr)`;
-        gridContainer.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
+function createGrid(s = 16) {
+    for (i = 0; i < (s * s); i++) {
+        container.style.gridTemplateRows = `repeat(${s}, 1fr)`;
+        container.style.gridTemplateColumns = `repeat(${s}, 1fr)`;
         var square = document.createElement("div");
         square.setAttribute("class", "square");
         square.setAttribute("id", `square${i}`)
         container.appendChild(square);
     }
+    Array.from(allSquaresNodeList).forEach(square => {
+        square.addEventListener("mouseover", function() {
+            square.style.backgroundColor = "black";
+        })
+    })
 }
 
-// Adds mouseover event to all squares by their id.
-function addSquareEvent(size=16, color="black") {
-    for (i = 0; i < (size*size); i++) {
-        let squareElement = document.getElementById("square" + i);
-        if (squareElement) {
-            squareElement.addEventListener("mouseover", function() {
-                squareElement.style.backgroundColor = color;
-            })
-        }
-    }
-}
+createGrid()
 
-// Calls the function that creates a the grid.
-createGrid();
-
-// Calls functin to set events for mouseover.
-addSquareEvent();
-
-// Variable contains reference to reset button.
-var resetButton = document.getElementById("reset");
-
-
-/*  Loops through and removes old squares from previous grid.
-Creates new grid. */
-resetButton.addEventListener("click", function() {
-    while (container.hasChildNodes()) {
-        container.removeChild(container.lastChild);
-    }
-    var userSize = askGridSize()
-    createGrid(userSize);
-    addSquareEvent(userSize);
-})
-
-// Function prompts user for grid size, checks that is it under 100.
-function askGridSize() {
-    let size = prompt("Enter the size of your grid", "16");
-    if (size > 100) {
-        alert("Max size is 100")
-        askGridSize();
-    } else {
-        return size;
-    }
-}
-
-// Variable contains reference to random color button.
-var randomColorButton = document.getElementById("randomColor");
-
-var allSquares = (Array.from(document.getElementsByClassName("square"))).length;
-
-// Set click event listener on random color button.
-randomColorButton.addEventListener("click", function() {
-    var gridSize = (Array.from(document.getElementsByClassName("square"))).length;
-    addSquareEvent(gridSize, randomColor());
-})
-
-function randomColor() {
-    let letters = '0123456789ABCDEF';
-    let color = '#';
+function randomRGB() {
+    let color = "#";
+    let values = "0123456789ABCDEFG";
     for (i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
+        color += values[Math.floor(Math.random() * 16)]
     }
     return color;
 }
+
+randomButton.addEventListener("click", function() {
+    Array.from(allSquaresNodeList).forEach(square => {
+        square.addEventListener("mouseover", function() {
+            square.style.backgroundColor = randomRGB();
+        })
+    })
+})
+
+function removeAllChildNodes(parent) {
+    while (parent.firstChild) {
+        parent.removeChild(parent.firstChild);
+    }
+}
+
+resetButton.addEventListener("click", function() {
+    let size = prompt("Enter your grid size:", "16");
+    while (size > 100) {
+        alert("Max size is 100");
+        size = prompt("Enter your grid size:", "16");
+    }
+    removeAllChildNodes(container);
+    createGrid(size);
+})
